@@ -10,16 +10,16 @@ elem.send_keys("손흥민") #원한는 값 입력
 elem.send_keys(Keys.RETURN) #엔터키 전송
 
 #scroll Down
-SCROLL_PAUSE_TIME = 1 #대기시간이 너무 적으면 중도에 정지됌  버튼 나오기전
+SCROLL_PAUSE_TIME = 2 #대기시간이 너무 적으면 중도에 정지됌  버튼 나오기전
 
-# Get scroll height
+# Get scroll height, 스크롤 높이 저장
 last_height = driver.execute_script("return document.body.scrollHeight")
 
 while True: #무한반복
     # Scroll down to bottom, 브라우저 끝까지 스크롤 내림
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    # Wait to load page=0.5초동안
+    # Wait to load page, 초동안
     time.sleep(SCROLL_PAUSE_TIME)
 
     # Calculate new scroll height and compare with last scroll height, 브라우저의 높이를 구해 새로운 높이 구함
@@ -36,12 +36,15 @@ while True: #무한반복
 images = driver.find_elements_by_css_selector(".rg_i.Q4LuWd") #클래스명 사용여러개 이미지 불러와 담기 #python selenium click, 첫번째 요소
 count = 1
 for image in images:
-    image.click() #이미지 클릭
-    time.sleep(3)   #시간지연
-    imageUrl=driver.find_element_by_css_selector(".n3VNCb").get_attribute("src") #큰 이미지 선택해 다운
+    try:
+        image.click() #이미지 클릭
+        time.sleep(3)   #시간지연
+        imageUrl=driver.find_element_by_xpath('/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div[1]/div[1]/div/div[2]/a/img').get_attribute("src") #큰 이미지 선택해 다운
 
-    urllib.request.urlretrieve(imageUrl, str(count)+"손흥민.jpg") #주소, 저장하고자 하는 이미지 이름
+        urllib.request.urlretrieve(imageUrl, str(count)+"손흥민.jpg") #주소, 저장하고자 하는 이미지 이름
 
-    count=count+1 #반복할때마다 숫자 파일 변경
+        count=count+1 #반복할때마다 숫자 파일 변경
+    except:
+        pass #오류가 중간에 발생하면 일단 넘엉감
 
 driver.close() #웹브라우저 닫기
